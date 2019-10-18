@@ -71,23 +71,6 @@ app.use(cors());
 
 //   ///////////// Products endpoints ////////////
 
-//   //Getting all the products
-//   app.get('/api/products', productsController.readAllProducts);
-//   //Getting a specified product
-//   //Use a request parameter, since retrieving a specified product..
-//   app.get('/api/products/:id', productsController.readProduct);
-
-//   //Admin || Create | Update | Delete Products
-//   app.get('/api/users', adminController.getAdminUsers);
-
-//   //Create a Product as a Admin
-//   app.post('/api/products', adminController.createProduct);
-
-//   //Update a product as Admin
-//   app.put('/api/products/:id', adminController.updateProduct);
-
-//   //Delete a product as a Admin
-//   app.delete('/api/products/:id', adminController.deleteProduct);
 // }, 200);
 
 app.use('/api', adminRouter);

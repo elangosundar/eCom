@@ -21,10 +21,11 @@ router.get('/adminusers', (req, res) => {
 // @access  Private
 // URL: http://localhost:5000/api/inventory
 router.get('/inventory', (req, res) => {
-  Product.find({}).exec((err, inventory) => {
-    if (err) console.log(`ERROR: ${err}`);
-    res.status(200).json({ inventory });
-  });
+  Product.find({})
+    .then(inventory => {
+      res.json({ inventory });
+    })
+    .catch(err => console.log(err));
 });
 
 // @route   POST
@@ -62,18 +63,17 @@ router.delete('/deleteproduct', (req, res) => {
 // @desc    Get a specific product by id
 // @access  Private
 // URL: http://localhost:5000/api/inventory/:id
-router.get('/singleitem', (req, res) => {
-  // const id = req.query.id;
-  // const id = req.params.id;
+router.get('/singleitem/:id', (req, res) => {
+  // Req.paramas || Path Variables // Product id
+  const id = req.params.id;
 
-  // Product.findById(ObjectId(id)).exec((err, product) => {
-  //   if (product) {
-  //     res.json({ success: true });
-  //   } else {
-  //     res.json({ success: false });
-  //   }
-  // });
-  res.json({ success: true });
+  Product.findById(ObjectId(id)).exec((err, product) => {
+    if (product) {
+      res.json({ success: true, product });
+    } else {
+      res.json({ success: false });
+    }
+  });
 });
 
 /////////////////////////////////////////////////////////////
