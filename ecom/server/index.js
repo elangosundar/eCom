@@ -1,24 +1,18 @@
-// Server
 const express = require('express');
 const bodyParser = require('body-parser');
-// Session, Allows server to use Cookie
 const session = require('express-session');
 const cors = require('cors');
 const mongoose = require('mongoose');
+
 // Database URI
 db = require('./keys').URI;
+// Cookie Secret
 session_secret = require('./keys').session;
 
 //Routes
 var adminRouter = require('./routes/admin_routes');
 
 const app = express();
-
-// Controllers || How we will define our endpoints
-// const adminController = require('./controllers/admin_controller');
-// const cloudinaryController = require('./controllers/cloudinary_controller');
-// const userController = require('./controllers/user_controller');
-// const productsController = require('./controllers/products_controller');
 
 //Make sure that Port is the same as the proxy
 const PORT = process.env.PORT || 5000;
@@ -48,30 +42,8 @@ app.use(
   })
 );
 
-// Allow user to use cross origin requests
+// Allow cross origin requests
 app.use(cors());
-
-// // The timeout is to allow the database to connect before anything else
-// setTimeout(() => {
-//   //Read the user's session.
-//   app.get('/api/user-data', userController.readUserData);
-
-//   //Add a item to cart.
-//   app.post('/api/user-data/cart', userController.addToCart);
-
-//   //Remove a item from the cart.
-//   app.delete('/api/user-data/cart/:id', userController.removeFromCart);
-
-//   //User login
-//   app.post('/api/login', userController.login);
-//   //Just need a login, since you are logging from your social media provider no need to register, only looks if a user already has a account.
-
-//   //When the user logouts
-//   app.post('/api/logout', userController.logout);
-
-//   ///////////// Products endpoints ////////////
-
-// }, 200);
 
 app.use('/api', adminRouter);
 
