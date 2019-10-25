@@ -5,6 +5,9 @@ const User = require('../models/user');
 const Product = require('../models/product');
 var ObjectId = mongoose.Types.ObjectId;
 
+// Validation
+const newProductValidation = require('../validation/newProduct');
+
 // @route   GET
 // @desc    Get Admin Users
 // @access  Private
@@ -33,7 +36,12 @@ router.get('/inventory', (req, res) => {
 // @access  Private
 // URL: http://localhost:5000/api/newproduct
 router.post('/newproduct', (req, res) => {
+  const { errors, isValid } = newProductValidation(req.body);
   const { name, description, price } = req.body;
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
 
   let newProduct = new Product({
     name,
