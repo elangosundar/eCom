@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const session = require('express-session');
+const passport = require('passport');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
@@ -10,7 +10,7 @@ db = require('./keys').URI;
 session_secret = require('./keys').session;
 
 //Routes
-var adminRouter = require('./routes/admin_routes');
+var Routes = require('./routes/routes');
 
 const app = express();
 
@@ -25,26 +25,19 @@ mongoose.connect(db, { useNewUrlParser: true }, err => {
   console.log('Connected to database');
 });
 
+//Passport Middleware
+app.use(passport.initialize());
+
+//Passport config
+require('./passport/passport_cust')(passport);
+
 // Middleware. Initializing req.body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Storing Cookies
-app.use(
-  session({
-    secret: session_secret,
-    resave: false, // If set to true, can cause memory leak
-    saveUninitialized: false,
-    cookie: {
-      // Max age of the cookie
-      maxAge: Date.now() + 30 * 86400 * 1000 // 24 hrs before expiration
-    }
-  })
-);
-
 // Allow cross origin requests
 app.use(cors());
 
-app.use('/api', adminRouter);
+app.use('/api', Routes);
 
 app.listen(PORT, () => console.log(`Running on port ${PORT}`));
