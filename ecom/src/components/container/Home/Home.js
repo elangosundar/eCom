@@ -1,35 +1,31 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { pullInventory } from '../../../actions/inventoryActions';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import ProductCard from '../../presentational/ProductCard/ProductCard';
-import Loader from '../../presentational/Loader/Loader';
 import './Home.css';
 
-export default class Home extends Component {
+class Home extends Component {
   constructor() {
     super();
-    this.state = {
-      products: [],
-      loading: true
-    };
+    this.state = {};
   }
 
   componentDidMount() {
-    axios
-      .get('api/inventory')
-      .then(res => {
-        console.log(res.data);
-        this.setState({ products: res.data.inventory, loading: false });
-      })
-      .catch(err => console.log(err));
+    this.props.pullInventory();
   }
+
+  componentDidUpdate() {
+    console.log(this.props.inventory);
+  }
+
   render() {
-    const { products, loading } = this.state;
-    if (!loading) {
+    if (this.props.inventory.length !== 0) {
       return (
         <div className='home container'>
           <div className='home-products container'>
-            {products.length
-              ? products.map(product => (
+            {this.props.inventory.length
+              ? this.props.inventory.map(product => (
                   <ProductCard key={product.id} {...product} />
                 ))
               : null}
@@ -37,7 +33,24 @@ export default class Home extends Component {
         </div>
       );
     } else {
-      return <Loader />;
+      return (
+        <div className='home container'>
+          <h1 className='no-inventory'>inventory is empty....</h1>
+        </div>
+      );
     }
   }
 }
+
+Home.propTypes = {
+  pullInventory: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  inventory: state.inventory
+});
+
+export default connect(
+  mapStateToProps,
+  { pullInventory }
+)(Home);

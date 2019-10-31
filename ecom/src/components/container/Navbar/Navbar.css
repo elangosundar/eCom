@@ -5,7 +5,7 @@
 }
 .desktop-nav {
   position: fixed;
-  background: cyan;
+  background: white;
   width: 100%;
   color: #fff;
   display: grid;
@@ -14,7 +14,7 @@
 .nav-link {
   height: 100%;
   font-size: 2em;
-  color: #fff;
+  color: black;
 }
 .nav-link:first-child {
   grid-column: 3/3;
