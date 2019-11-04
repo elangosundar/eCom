@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_ERRORS, GET_INVENTORY } from './types';
+import { ADD_TO_CART, GET_INVENTORY } from './types';
 
 // Pull initial inventory
 export const pullInventory = () => dispatch => {
@@ -12,4 +12,11 @@ export const pullInventory = () => dispatch => {
       });
     })
     .catch(err => console.log(err));
+};
+
+export const addToCart = productInfo => dispatch => {
+  dispatch({
+    type: ADD_TO_CART,
+    payload: productInfo
+  });
 };

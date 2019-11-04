@@ -68,19 +68,34 @@ router.get('/adminInventory', (req, res) => {
 // URL: http://localhost:5000/api/newproduct
 router.post('/newproduct', (req, res) => {
   const { errors, isValid } = newProductValidation(req.body);
-  const { name, description, price } = req.body;
+  const { name, description, price, quantity } = req.body;
 
   if (!isValid) {
     return res.status(400).json(errors);
   }
 
-  let newProduct = new Product({
-    name,
-    description,
-    price
+  Product.findOne({ name }).then(product => {
+    if (product) {
+      Product.findOneAndUpdate(
+        name,
+        { $inc: { quantity: 1 } },
+        { new: true, useFindAndModify: false }
+      )
+        .then(updatedProduct => {
+          res.json({ suceess: 'Quantity was Updated' });
+        })
+        .catch(err => console.log(err));
+    } else {
+      let newProduct = new Product({
+        name,
+        description,
+        price,
+        quantity
+      });
+      newProduct.save();
+      res.status(200).json({ product: newProduct });
+    }
   });
-  newProduct.save();
-  res.status(200).json({ product: newProduct });
 });
 
 // @route   DELETE
@@ -229,6 +244,15 @@ router.post('/loginAdmin', (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
+
+// @route   POST
+// @desc    Add item to cart
+// @access  Public
+// URL: http://localhost:5000/api/addCart/:id
+router.get('/addCart/:id', (req, res) => {
+  // Req.paramas || Path Variables // Product id
+  const id = req.params.id;
+});
 
 // @route   GET
 // @desc    Get a specific product by id

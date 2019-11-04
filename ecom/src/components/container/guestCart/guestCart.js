@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ProductCard from '../../presentational/ProductCard/ProductCard';
-import './Cart.css';
+import './guestCart.css';
 
 const sampleCartData = [
   { name: 'Test 1', description: 'Test Product 1', price: 20, id: 1 },
@@ -17,7 +17,11 @@ export default class Cart extends Component {
             <h2>Your Cart!</h2>
             <div>
               {sampleCartData.map(product => (
-                <ProductCard key={product.id} {...product} />
+                <ProductCard
+                  key={product.id}
+                  price={product.price}
+                  name={product.name}
+                />
               ))}
             </div>
           </div>
